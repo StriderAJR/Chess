@@ -32,7 +32,7 @@ namespace Chess.WPF
             x = letter - 'A';
             y = number - '1';
 
-            isFilled = (y % 2 == 0 && x % 2 == 0) || (y % 2 == 0 || x % 2 != 0);
+            isFilled = y % 2 == 0 ? x % 2 == 0 : x % 2 != 0;
         }
 
         public void Render()
