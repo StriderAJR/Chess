@@ -13,20 +13,19 @@ namespace Chess.WPF
 {
     public class BoardCellControl
     {
-        private char letter, number;
+        private BoardControl board;
         private int x, y;
-
         private bool isFilled;
-        private bool isSelected;
         private Figure figure;
-
         private Canvas canvas;
 
-        public BoardCellControl(char letter, char number, Figure figure, Canvas canvas)
+        public bool IsSelected { get; set; }
+
+        public BoardCellControl(BoardControl parent, char letter, char number, Figure figure, Canvas canvas)
         {
+            this.board = parent;
+
             this.canvas = canvas;
-            this.letter = letter;
-            this.number = number;
             this.figure = figure;
 
             x = letter - 'A';
@@ -43,7 +42,7 @@ namespace Chess.WPF
             var rec = new Rectangle();
             rec.Height = cellSize;
             rec.Width = cellSize;
-            rec.Fill = isSelected 
+            rec.Fill = IsSelected 
                 ? Brushes.Red 
                 : isFilled ? Brushes.Gray : Brushes.White;
             rec.Stroke = Brushes.Black;
@@ -75,24 +74,7 @@ namespace Chess.WPF
 
         internal void Clicked(object sender, MouseButtonEventArgs e)
         {
-            //MessageBox.Show(figure == null ? "Пустая ячейка" : $"Это {figure.RusName}");
-            isSelected = !isSelected;
-
-            // состояние доски изменилось, нужно заставить Canvas обновиться
-            // Перерисовка у нас висит на событии SizeChangedEvent, поэтому дергаем его насильно
-
-            // создаем псевдо информацию и новом размере канвы, какие у него буду значения - неважно
-            SizeChangedInfo sifo = new SizeChangedInfo(canvas, new Size(0, 0), true, true);
-            // создаем объект-аргумент для передачи в событие - но у события SizeChangedEvent есть проблема, конструктор SizeChangedEventArgs
-            // не вызвать напрямую, поэтому приходится это делать через рефлексию насильно
-            SizeChangedEventArgs ea = typeof(SizeChangedEventArgs)
-                .GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance) // находим приватный конструктор, который от нас скрыт напрямую
-                .FirstOrDefault()
-                .Invoke(new object[] { (canvas as FrameworkElement), sifo }) as SizeChangedEventArgs; // запускаем конструктор насильно через метод Invoke()
-            ea.RoutedEvent = Canvas.SizeChangedEvent;
-
-            // вызываем событие
-            canvas.RaiseEvent(ea);
+            board.CellClicked(this);
         }
     }
 }

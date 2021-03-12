@@ -21,31 +21,20 @@ namespace Chess.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        Board board = new Board();
-        List<BoardCellControl> boardCells = new List<BoardCellControl>();
+        Board board;
+        BoardControl boardControl;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            for (char i = 'A'; i <= 'H'; i++)
-            {
-                for (char j = '1'; j <= '8'; j++)
-                {
-                    BoardCellControl boardCell = new BoardCellControl(i, j, board.Get(i, j), canvas);
-                    boardCells.Add(boardCell);
-                }
-            }
+            board = new Board();
+            boardControl = new BoardControl(board, canvas);
         }
 
         private void canvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            canvas.Children.Clear();
-
-            foreach(var boardCell in boardCells)
-            {
-                boardCell.Render();
-            }
+            boardControl.Render();
         }
     }
 }
