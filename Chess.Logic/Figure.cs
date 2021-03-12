@@ -20,7 +20,14 @@ namespace Chess.Logic
 
         public override bool IsCorrectMove(Board board, string start, string end)
         {
-            throw new NotImplementedException();
+            int dx = Math.Abs(end[0] - start[0]);
+            int dy = Math.Abs(end[1] - start[1]);
+
+            // TODO проверка на перепрыгивание
+
+            return start != end 
+                && dy == 0 
+                && (dx == 1 || dx == 2);
         }
     }
 
@@ -32,7 +39,14 @@ namespace Chess.Logic
 
         public override bool IsCorrectMove(Board board, string start, string end)
         {
-            throw new NotImplementedException();
+            int dx = Math.Abs(end[0] - start[0]);
+            int dy = Math.Abs(end[1] - start[1]);
+
+            // TODO проверка на перепрыгивание
+
+            return start != end 
+                && (dx == 0 && dy != 0) 
+                || (dx != 0 && dy == 0);
         }
     }
 
@@ -48,7 +62,9 @@ namespace Chess.Logic
             int dx = Math.Abs(end[0] - start[0]);
             int dy = Math.Abs(end[1] - start[1]);
 
-            return dx + dy == 3 && dx * dy == 2;
+            return start != end 
+                && dx + dy == 3 
+                && dx * dy == 2;
         }
     }
 
@@ -60,6 +76,8 @@ namespace Chess.Logic
 
         public override bool IsCorrectMove(Board board, string start, string end)
         {
+            if (start == end) return false;
+
             // Перепрыгивать через фигуры может только конь, 
             // поэтому при проверке нужно убедить, что никто не стоит на пути
 
@@ -107,7 +125,15 @@ namespace Chess.Logic
 
         public override bool IsCorrectMove(Board board, string start, string end)
         {
-            throw new NotImplementedException();
+            int dx = Math.Abs(end[0] - start[0]);
+            int dy = Math.Abs(end[1] - start[1]);
+
+            // TODO проверка на перепрыгивание
+
+            return start != end 
+                && dx == dy 
+                || (dx == 0 && dy != 0) 
+                || (dx != 0 && dy == 0);
         }
     }
 
@@ -119,7 +145,15 @@ namespace Chess.Logic
 
         public override bool IsCorrectMove(Board board, string start, string end)
         {
-            throw new NotImplementedException();
+            int dx = Math.Abs(end[0] - start[0]);
+            int dy = Math.Abs(end[1] - start[1]);
+
+            // TODO проверка на перепрыгивание
+
+            return start != end 
+                && (dx == dy && dx == 1)
+                || (dx == 0 && dy == 1) 
+                || (dx == 1 && dy == 0);
         }
     }
 }

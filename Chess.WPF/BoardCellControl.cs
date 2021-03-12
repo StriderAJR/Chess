@@ -16,17 +16,21 @@ namespace Chess.WPF
         private BoardControl board;
         private int x, y;
         private bool isFilled;
-        private Figure figure;
+        
         private Canvas canvas;
 
+        public bool IsMoveAvailable { get; set; }
+
         public bool IsSelected { get; set; }
+
+        public Figure Figure { get; set; }
 
         public BoardCellControl(BoardControl parent, char letter, char number, Figure figure, Canvas canvas)
         {
             this.board = parent;
 
             this.canvas = canvas;
-            this.figure = figure;
+            this.Figure = figure;
 
             x = letter - 'A';
             y = number - '1';
@@ -44,14 +48,16 @@ namespace Chess.WPF
             rec.Width = cellSize;
             rec.Fill = IsSelected 
                 ? Brushes.Red 
-                : isFilled ? Brushes.Gray : Brushes.White;
+                    :IsMoveAvailable
+                        ? Brushes.Yellow
+                        : isFilled ? Brushes.Gray : Brushes.White;
             rec.Stroke = Brushes.Black;
             rec.StrokeThickness = 1;
 
             // внутрь Rectngle нельзя поместить текст, поэтому создаем Border, а уже внутри него TextBlock
             var border = new Border();
             var tbfigureName = new TextBlock();
-            tbfigureName.Text = figure?.Abbreviation.ToString();
+            tbfigureName.Text = Figure?.Abbreviation.ToString();
             tbfigureName.VerticalAlignment = VerticalAlignment.Center;
             tbfigureName.HorizontalAlignment = HorizontalAlignment.Center;
             tbfigureName.FontSize = 30;
@@ -70,6 +76,11 @@ namespace Chess.WPF
             Canvas.SetLeft(rec, y * cellSize);
             Canvas.SetTop(border, x * cellSize);
             Canvas.SetLeft(border, y * cellSize);
+        }
+
+        public string GetCoordinate()
+        {
+            return $"{(char)(x + 'A')}{(char)(y + '1')}";
         }
 
         internal void Clicked(object sender, MouseButtonEventArgs e)
