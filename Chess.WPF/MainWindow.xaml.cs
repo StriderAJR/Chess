@@ -30,7 +30,7 @@ namespace Chess.WPF
 
             for (char i = 'A'; i <= 'H'; i++)
             {
-                for (char j = '1'; j < '8'; j++)
+                for (char j = '1'; j <= '8'; j++)
                 {
                     BoardCellControl boardCell = new BoardCellControl(i, j, board.Get(i, j), canvas);
                     boardCells.Add(boardCell);
